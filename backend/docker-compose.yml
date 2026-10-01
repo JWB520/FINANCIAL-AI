@@ -1,0 +1,45 @@
+
+# 本地依赖：数据库（带 pgvector）+ 缓存/队列。只起依赖，不起后端：
+#     docker compose up -d db redis
+# 然后把 .env 里的 RQC_DATABASE_URL / RQC_REDIS_URL 指到它们。
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: rqc
+      POSTGRES_PASSWORD: rqc
+      POSTGRES_DB: rqc
+    ports: ["5432:5432"]
+    volumes: ["rqc_pg:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rqc"]
+      interval: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 10
+
+  # 接口服务与队列消费进程共用一份镜像；地址与端口由 .env 决定（默认 8000）
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    env_file: [.env]
+    ports: ["8000:8000"]
+    depends_on: [db, redis]
+
+  queue-consumer:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    env_file: [.env]
+    depends_on: [db, redis]
+    command: ["celery", "-A", "app.workers.celery_app:celery_app", "worker", "-l", "info", "-Q", "check"]
+
+volumes:
+  rqc_pg:
