@@ -1,0 +1,43 @@
+{
+  "name": "rqc-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "electron/main.cjs",
+  "description": "RQC 研报核查与质量评估智能体平台 · 前端工程",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc --noEmit",
+    "verify:core": "esbuild scripts/verify-core.ts --bundle --platform=node --format=esm --outfile=scripts/verify-core.mjs --alias:@=./src --define:import.meta.env={} && node scripts/verify-core.mjs",
+    "verify:render": "esbuild scripts/smoke-render.tsx --bundle --platform=node --format=cjs --outfile=scripts/smoke-render.cjs --alias:@=./src --define:import.meta.env={} --loader:.css=empty && node scripts/smoke-render.cjs",
+    "desktop": "node scripts/start-desktop.cjs",
+    "verify:store": "node scripts/verify-project-store.cjs",
+    "verify:mock": "esbuild scripts/verify-mock-learning.ts --bundle --platform=node --format=esm --outfile=scripts/verify-mock-learning.mjs --alias:@=./src --define:import.meta.env={} && node scripts/verify-mock-learning.mjs",
+    "verify:charts": "esbuild scripts/verify-charts.ts --bundle --platform=node --format=esm --outfile=scripts/verify-charts.mjs --alias:@=./src --define:import.meta.env={} && node scripts/verify-charts.mjs",
+    "verify:nav": "esbuild scripts/verify-report-nav.tsx --bundle --platform=node --format=cjs --outfile=scripts/verify-report-nav.cjs --alias:@=./src --define:import.meta.env={} --loader:.css=empty && node scripts/verify-report-nav.cjs",
+    "verify": "npm run verify:store && npm run verify:mock && npm run verify:core && npm run verify:nav && npm run verify:charts && npm run verify:render"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.5.1",
+    "@tanstack/react-query": "^5.59.5",
+    "antd": "^5.21.6",
+    "dayjs": "^1.11.13",
+    "echarts": "^5.5.1",
+    "pdfjs-dist": "^6.4.299",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "electron": "^44.4.5",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9"
+  }
+}
