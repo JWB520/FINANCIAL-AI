@@ -26,6 +26,7 @@ import re
 from typing import Any
 
 from app.agents.base import BaseChecker, CheckContext, FindingDraft
+from app.common.text import split_sentences
 from app.domain.enums import FindingStatus, RiskLevel
 from app.domain.risk_rules import resolve_level
 from app.infra.tools import calculator
@@ -231,6 +232,168 @@ def rule_recall(text: str) -> list[dict[str, Any]]:
     return items
 
 
+# ============================================================================
+# 「本句自证」通道：算式要用到的数**全在这一句里**、方向唯一确定 —— 这类算不平就是原文有错
+#
+# 【为什么必须单独有这条路】模型看一句话只挑它认得的 1~2 组关系（实测：一页十几句带数字，
+# 它只给一两条），而"两占比之和=100%""分项之和=合计"这类**根本不需要模型参与**：
+# 句子里就把方程写全了。以前 `recall()` 写的是 `if items: return items`，
+# 模型一有产出规则通道就永远不跑 —— 等于这条确定性通道形同虚设。
+#
+# 【实测教训（用户植入错误）】原文「收入分别为 20.11/13.04 亿元，占比 60.67%/39.33%」
+# 被改成 55.00%/39.33%：55.00+39.33=94.33≠100，且 20.11÷(20.11+13.04)=60.66≠55.00，
+# 双重自证矛盾本可一击命中，却因为"模型分母挑错(用 28.78) → 复核判我方配错"整条被排掉。
+# ============================================================================
+
+# ① 两个分项 + 两个占比：「…收入分别为 20.11/13.04 亿元，占比 60.67%/39.33%」
+_SPLIT_SHARE = re.compile(
+    r"([\d,]+(?:\.\d+)?)\s*/\s*([\d,]+(?:\.\d+)?)"  # 两个分项
+    r"[^。；;]{0,20}?占比\s*(-?[\d,]+(?:\.\d+)?)\s*%\s*/\s*"  # 第一个占比
+    r"(-?[\d,]+(?:\.\d+)?)\s*%"  # 第二个占比
+)
+# ② 分项之和 = 合计：「A、B 分别为 x、y，合计 T」
+_SPLIT_TOTAL = re.compile(
+    r"([\d,]+(?:\.\d+)?)\s*[、,，和及与]\s*([\d,]+(?:\.\d+)?)"
+    r"(?:\s*[、,，和及与]\s*([\d,]+(?:\.\d+)?))?"
+    r"[^。；;]{0,16}?(?:合计|共计|总计|合共)\s*(?:为|达|约|是)?\s*([\d,]+(?:\.\d+)?)"
+)
+# 出现这些词时"增速"口径本身就可疑（两年复合？含其他分项？）→ 不在这条通道下结论
+_AMBIGUOUS_GROWTH = re.compile(r"两年|复合|年均|累计|CAGR|折合|合计|共计|总计")
+
+
+def _fmt(value: float) -> str:
+    """展示用数字：去掉浮点尾巴（60.663170 → 60.6632）。"""
+    return f"{value:.4f}".rstrip("0").rstrip(".") or "0"
+
+
+def self_contained_recall(text: str) -> list[dict[str, Any]]:
+    """只做"整句自证"的关系：输入全在本句、方向唯一 —— 算不平即原文有错。
+
+    产出条目的 `source` 固定为 `rule_selfcontained`，因此：
+      · `item_scope` 会把它判成 `sentence`（输入都在句内）→ 判定链自动给"不一致 = 有问题"；
+      · 服务端**不把它交给模型复核**（算术结论不该由模型投票推翻，见 collect_review_candidates）；
+      · 备注由本地算出来（`why`），不假装是模型复核的结论。
+
+    【两处踩过的坑，都在下面那条循环里】
+      · 必须**逐句**做（先切句再匹配）：按整页做时，同一句里多组"由 A 增至 B + 百分比"
+        会配对错（实测把 223% 配给 1.71→4.26，报了误报）；而且批注的"原文"会变成整页文本、
+        版面框会框住一大片，卡片上没法看。
+      · 必须**逐个匹配**（finditer），不能只 `search` 第一个：一页里第二句同型的话就永远查不到
+        （实测：第 1 句先被匹配，第 2 句的错值 55.0% 整段漏掉）。
+    """
+    if not text:
+        return []
+    items: list[dict[str, Any]] = []
+    for sentence in split_sentences(text):
+        items.extend(_self_contained_in_sentence(sentence))
+    return items
+
+
+def _self_contained_in_sentence(text: str) -> list[dict[str, Any]]:
+    """一句话里的自证关系（① 占比互补 / ② 分项合计 / ③ 同句增速）。
+
+    参数名沿用 `text`，但调用方保证它**只是一句** —— 下面三条规则都依赖这个前提（配对才可靠）。
+    """
+    if not text:
+        return []
+    items: list[dict[str, Any]] = []
+
+    # ---- ① 两分项 + 两占比：分母就是两分项之和（本句自证），顺带查"两占比之和 = 100%" ----
+    for match in _SPLIT_SHARE.finditer(text):
+        first, second = match.group(1), match.group(2)
+        a, b = _to_float(first), _to_float(second)
+        p1, p2 = _to_float(match.group(3)), _to_float(match.group(4))
+        if not (a and b and p1 is not None and p2 is not None and (a + b)):
+            continue
+        for part, claimed, other, ordinal in ((first, p1, p2, "第一个"), (second, p2, p1, "第二个")):
+            items.append(
+                {
+                    "expression": f"{part}/({first}+{second})*100",
+                    "claimed": claimed,
+                    "unit": "%",
+                    "statement": text,
+                    "tolerance_pct": 0.5,
+                    "source": "rule_selfcontained",
+                    "why": (
+                        f"本句自证：{ordinal}分项 {part} 占两分项之和（{first}+{second}={_fmt(a + b)}）的比重，"
+                        f"另一个占比为 {_fmt(other)}%；两个占比相加应为 100%，原文相加为 {_fmt(p1 + p2)}%"
+                    ),
+                }
+            )
+
+    # ---- ② 分项之和 = 合计 ----
+    for match in _SPLIT_TOTAL.finditer(text):
+        groups = [value for value in match.groups()[:3] if value is not None]
+        parts = [_to_float(value) for value in groups]
+        total = _to_float(match.group(4))
+        # 防误报：匹配段里若还有别的数字，说明分项没列全（如"A、B、C、D 合计 T"只抓到两个），
+        # 这时不下结论 —— 漏报好过报错。
+        if total in (None, 0) or len(groups) < 2 or None in parts:
+            continue
+        if len(_numbers_in(match.group(0))) != len(parts) + 1:
+            continue
+        expression = "+".join(_fmt(value) for value in parts)  # type: ignore[arg-type]
+        items.append(
+            {
+                "expression": expression,
+                "claimed": total,
+                "unit": "",
+                "statement": text,
+                "tolerance_pct": 0.5,
+                "source": "rule_selfcontained",
+                "why": f"本句自证：各分项相加应等于合计，{expression} 与原文合计 {_fmt(total)} 对比",
+            }
+        )
+
+    # ---- ③ 同句增速：「由 A 增至 B，…增长 C%」----
+    #
+    # 【为什么这条要收得比①②严】实测踩到两条误报：
+    #   · 第 13 页同一句里有**多组**"由 A 增至 B + 百分比"，223% 被配给了 (1.71→4.26)
+    #     （它其实属于 1335→4318，那组自己算出来 223.4% 是对的）→ 配对错 = 误报；
+    #   · 第 16 页"由 2.3 降至 2.1，下降 8.0%"：报表用的是**未四舍五入的原值**，
+    #     拿页面印出来的 2.3/2.1 反推得 8.7%，差 0.7 个百分点 → 精度差 = 误报。
+    # 因此：① 全句只允许一组 A→B、只允许一个百分比（多组时配对不可靠 → 交给模型复核）；
+    #       ② 容差放宽到 10%，只抓"差得离谱"的（如 40% 写成 55%）。
+    growth_matches = list(_FROM_TO.finditer(text))
+    for match in growth_matches if len(growth_matches) == 1 else []:
+        if _AMBIGUOUS_GROWTH.search(text[max(0, match.start() - 12) : match.end() + 24]):
+            continue  # "两年/复合/累计/合计"这类词出现时口径可疑，交给模型复核
+        before, after = _to_float(match.group(1)), _to_float(match.group(2))
+        if not (before and after and before != 0):
+            continue
+        # 只看**同一句**里"变了之后"出现的百分比：切到句末，避免把下一句的百分比当增速（防误报）
+        tail = text[match.end() :]
+        for stop in ("。", "；", ";", "\n"):
+            tail = tail.split(stop)[0]
+        tail_percent = _PERCENT_VALUE.search(tail)
+        if tail_percent is None:
+            continue
+        if len(_PERCENT_VALUE.findall(tail)) != 1:
+            continue  # 同一句里有多个百分比 → 说不清哪个属于这组数，不在这里下结论
+        claimed = _to_float(tail_percent.group(1))
+        if claimed is None:
+            continue
+        falling = bool(_FALLING.search(text[match.start() : match.end()])) and not _RISING.search(tail)
+        # 降幅也按「变化量 ÷ 期初」算：基期是变之前那个数（写错分母是最常见的口径错误）
+        expression = f"({after}-{before})/{before}*100" if not falling else f"({before}-{after})/{before}*100"
+        items.append(
+            {
+                "expression": expression,
+                "claimed": claimed,
+                "unit": "%",
+                "statement": text,
+                # 10% 容差：页面印的是四舍五入后的值，拿 2.3/2.1 这种精度反推会有零点几个百分点的误差
+                "tolerance_pct": 10.0,
+                "source": "rule_selfcontained",
+                "why": (
+                    f"本句自证：由 {_fmt(before)} 变到 {_fmt(after)}，"
+                    f"按「变化量 ÷ 基期」复算{'降幅' if falling else '增速'}"
+                ),
+            }
+        )
+    return items
+
+
 class Calculator_checker(BaseChecker):
     """计算核查（P0）：抽数字 -> 复算 -> 比对。
 
@@ -257,6 +420,7 @@ class Calculator_checker(BaseChecker):
         # 本次运行的取数来源统计（实验页要如实展示"哪几条是 AI 抽的、哪几条是规则兜的"）
         self.stats: dict[str, int] = {
             "llm": 0,
+            "self_contained": 0,
             "rule": 0,
             "unevaluable": 0,
             "miss": 0,
@@ -297,7 +461,18 @@ class Calculator_checker(BaseChecker):
     # ② 提取：优先模型，失败降级规则
     # ------------------------------------------------------------------
     async def recall(self, text: str) -> list[dict[str, Any]]:
-        """从这一页文本里召回"可复算的量"（模型优先，规则兜底）。"""
+        """从这一页文本里召回"可复算的量"。
+
+        【两条通道取并集，不是二选一】以前这里是 `if items: return items` —— 模型一有产出，
+        规则通道就永远不跑，等于把确定性那部分关掉了（实测：一页十几句带数字，模型只给一两条）。
+          · 本句自证（`self_contained_recall`）：确定性关系（占比互补 / 分项合计 / 同句增速），
+            输入全在本句 → **无条件跑**，且它的结论不由模型复核推翻；
+          · 模型抽取（`extract_numbers`）：覆盖需要"读懂口径"的那些关系。
+        """
+        deterministic = self._screen(self_contained_recall(text), text)
+        if deterministic:
+            self.stats["self_contained"] += len(deterministic)
+
         items: list[dict[str, Any]] = []
         if self.llm is not None and getattr(self.llm, "available", False):
             try:
@@ -309,12 +484,18 @@ class Calculator_checker(BaseChecker):
         items = self._screen(items, text)
         if items:
             self.stats["llm"] += len(items)
-            return items
-        rule_items = self._screen(rule_recall(text), text)
-        self.stats["rule"] += len(rule_items)
-        if not rule_items:
+        elif not deterministic:
+            # 模型没给出东西、确定性通道也没命中 → 最后才降级到老规则（它只在"算得对"时产出）
+            fallback = self._screen(rule_recall(text), text)
+            self.stats["rule"] += len(fallback)
+            items = fallback
+
+        # 上限放宽到 8：statement 是"整页文本"，一页十几句带数字，限太死会把后面的同型条目挤掉
+        # （确定性条目排在前面，优先保留）。重复算式由 dedupe_items 按 (算式, 声称值) 去重。
+        merged = dedupe_items(deterministic + items, per_claim_limit=8)
+        if not merged:
             self.stats["miss"] += 1
-        return rule_items
+        return merged
 
     @staticmethod
     def _parse_llm_items(data: Any, text: str) -> list[dict[str, Any]]:
@@ -386,7 +567,9 @@ class Calculator_checker(BaseChecker):
         compared = calculator.compare(computed, claimed_value, rel_tol=tolerance)
         consistent = bool(compared["consistent"])
 
-        # 规则模式只报一致，不报不一致（见文件头说明）
+        # 老规则模式只报一致、不报不一致（见 rule_recall 说明）；
+        # 但「本句自证」类（source=rule_selfcontained）**必须报不一致** —— 它的输入全在本句，
+        # 算不平就是原文有错，这正是当初漏掉用户植入错误的那个缺口。
         if not consistent and item["source"] == "rule":
             self.stats["miss"] += 1
             return None
@@ -474,6 +657,11 @@ class Calculator_checker(BaseChecker):
             "annotation": annotation,
         }
 
+        if item["source"] == "rule_selfcontained":
+            # 备注就是本地算出来的说明（why）—— 不经模型，也不假装是模型复核的结论
+            trace["self_check"] = str(item.get("why") or "")
+            trace["review_note"] = str(item.get("why") or "")
+
         if consistent:
             reason = f"复算一致：{result['normalized']} = {trace['computed_display']}{unit}，与原文一致"
             suggestion = None
@@ -493,7 +681,9 @@ class Calculator_checker(BaseChecker):
             rule_codes=rule_codes,
             suggestion=suggestion,
             calc_trace=trace,
-            confidence=0.85 if item["source"] == "llm" else 0.6,
+            # 本句自证的置信度最高（本地算术、输入全在句内、可复算）；
+            # 其次是模型抽取（要读口径）；老规则兜底最低。
+            confidence=0.92 if item["source"] == "rule_selfcontained" else (0.85 if item["source"] == "llm" else 0.6),
             evidences=[self._evidence(claim, item)],
         )
 

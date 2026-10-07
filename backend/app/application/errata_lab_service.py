@@ -81,6 +81,11 @@ def collect_review_candidates(drafts: list[Any], claims: list[Any]) -> list[tupl
         trace = dict(getattr(draft, "calc_trace", None) or {})
         if trace.get("conclusion") not in MISMATCH_CONCLUSIONS:
             continue
+        # 「本句自证」类**不交给模型复核**：算式输入全在本句、算术唯一确定。
+        # 放它进复核正是当初漏掉用户植入错误的那个口子 —— 模型一句"我方配错"，
+        # 真错误就被排掉了（实测：55.00%+39.33%=94.33% 这种硬矛盾被排成"机器配错"）。
+        if str(trace.get("extracted_by") or "") == "rule_selfcontained":
+            continue
         if trace.get("computed") is None or trace.get("claimed") is None:
             continue
         statement = str(trace.get("statement") or "")
@@ -558,6 +563,7 @@ class ErrataLabService:
             "review_dropped": review_stats["dropped"],
             "review_unclear": review_stats["unclear"],
             "rects_located": sum(1 for a in annotations if a.get("rects")),
+            "self_contained": int(checker.stats.get("self_contained", 0)),
         }
 
         dropped = int(checker.stats.get("dropped", 0))
@@ -571,6 +577,14 @@ class ErrataLabService:
             notes.append(
                 f"另有 {cross_skipped} 条算式借用了上下文基数却「算不平」：跨句推断容易张冠李戴，"
                 "这类不直接当问题报，先交模型带原文复核（见下面的复核说明）。"
+            )
+
+        self_contained = int(stats["self_contained"])
+        if self_contained:
+            notes.append(
+                f"另有 {self_contained} 条是「本句自证」型的确定性核对（占比之和、分项合计、同句增速）："
+                "算式用到的数字全部来自同一句，算不平就是原文有错 —— 这部分不需要模型参与，"
+                "也不会被复核推翻（复核只管「需要读懂口径」的那些）。"
             )
 
         located = int(stats["rects_located"])
@@ -590,6 +604,17 @@ class ErrataLabService:
             "failed": 0,
             "detail": [],
         }
+
+        calls = int(llm_summary.get("calls") or 0)
+        failed = int(llm_summary.get("failed") or 0)
+        if calls and failed == calls:
+            # 【必须大声说出来】Key 无效/欠费/断网时模型这条腿整个是断的，但 `available` 仍是 True
+            # （它只表示"配了 Key"）。不点破的话，用户会把"没查出来"当成"报告没问题" —— 实测踩过。
+            notes.append(
+                f"⚠ 本次 {calls} 次模型调用「全部失败」（原因见 llm.detail，常见是 Key 无效 / 欠费 / 网络）："
+                "这一轮只剩「本句自证」那类本地确定性核对的结论，覆盖率明显偏低。"
+                "这不代表「报告没问题」，而是「没查成」—— 请先修好模型再重跑。"
+            )
 
         return {
             "report_path": str(path),

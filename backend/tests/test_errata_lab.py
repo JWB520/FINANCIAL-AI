@@ -250,5 +250,9 @@ def test_end_to_end_synthetic_pdf(sample_pdf: Path) -> None:
         assert annotation["status"] in ("pass", "risk", "uncovered")
         if annotation["status"] == "uncovered":
             assert annotation["conclusion"]
-    if stats["pass"]:
-        assert stats["extracted_by_rule"] >= 1
+    # 无 Key 时的结论只能来自**确定性通道**（本句自证 / 老规则），绝不能标成"模型抽的"。
+    # 2026-10 起多了"本句自证"这条（占比互补 / 分项合计 / 同句增速），所以两者加起来算。
+    if stats["pass"] or stats["risk"]:
+        assert stats["extracted_by_rule"] + stats["self_contained"] >= 1
+    # 夹具里第 2 句本来就有个"故意写错的"数：净利润由 0.30 增至 0.42，同比增长写 55.0%（应为 40.0%）
+    assert any(item["status"] == "risk" for item in result["annotations"]), "植入式的错值必须报出来（这是召回率回归）"

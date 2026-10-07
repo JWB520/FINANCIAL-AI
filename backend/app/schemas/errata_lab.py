@@ -83,7 +83,13 @@ class Annotation(BaseModel):
     conclusion: str = Field(default="", description="结论（AI 说的那份话）")
     suggestion: str | None = None
     confidence: float | None = None
-    extracted_by: Literal["llm", "rule"] = "llm"
+    extracted_by: Literal["llm", "rule", "rule_selfcontained"] = Field(
+        default="llm",
+        description=(
+            "算式是谁给的：llm=模型抽的；rule=老规则兜底；"
+            "rule_selfcontained=本句自证（输入全在同一句，纯本地算术，不经模型复核也不被推翻）"
+        ),
+    )
     extract_reason: str = ""
     scope: Literal["sentence", "context"] = Field(
         default="sentence",
@@ -135,6 +141,10 @@ class ErratalStats(BaseModel):
     review_dropped: int = Field(default=0, description="复核判定为机器配错、已从结果剔除的条数")
     review_unclear: int = Field(default=0, description="复核无法判定、保留为待人工确认的条数")
     rects_located: int = Field(default=0, description="成功在 PDF 版面上定位到矩形框的批注条数")
+    self_contained: int = Field(
+        default=0,
+        description="「本句自证」型确定性核对的条数（占比之和 / 分项合计 / 同句增速：输入全在同一句，不经模型、不被推翻）",
+    )
 
 
 class LlmSummary(BaseModel):
