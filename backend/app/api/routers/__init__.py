@@ -14,6 +14,7 @@ from app.api.routers import (
     auth,
     claims,
     dimensions,
+    errata_lab,
     help,
     knowledge,
     learning,
@@ -37,3 +38,5 @@ api_router.include_router(learning.router)
 api_router.include_router(audit.router)
 api_router.include_router(dimensions.router)
 api_router.include_router(help.router)
+# 研报勘误实验（数字复算）：自包含的三条接口，不动上面任何一条既有端点
+api_router.include_router(errata_lab.router)

@@ -1,0 +1,992 @@
+{
+  "report_path": "E:\\草稿\\软件实现\\中瓷电子（003031.SZ）投资价值分析报告(6).pdf",
+  "report_name": "中瓷电子（003031.SZ）投资价值分析报告(6).pdf",
+  "pages_total": 25,
+  "page_range": null,
+  "requested_types": [
+    "calc_number"
+  ],
+  "unsupported_types": [],
+  "annotations": [
+    {
+      "id": "a0001",
+      "page": 1,
+      "block_id": "b0001",
+      "start_offset": 516,
+      "end_offset": 582,
+      "statement": "2025 年公司电子陶瓷材料及元件、第三代半导体器件及模块收入分别为 20.11/13.04 亿元，占比60.67%/39.33%。",
+      "expression": "20.11/28.78*100",
+      "normalized": "20.11/28.78*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "20.11÷28.78",
+          "value": "0.698749",
+          "value_raw": 0.6987491313412091
+        },
+        {
+          "step": 2,
+          "expression": "20.11 / 28.78×100",
+          "value": "69.874913",
+          "value_raw": 69.8749131341209
+        }
+      ],
+      "computed": 69.8749131341209,
+      "claimed": 60.67,
+      "unit": "%",
+      "deviation": 9.2049131341209,
+      "rel_deviation": 0.15172100105687986,
+      "tolerance_pct": 0.5,
+      "status": "uncovered",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "跨句复算对不上：20.11/28.78*100 = 69.874913%，原文写 60.67%。算式用到了同页其他语句的数字，机器不单独下「报告有错」的结论，请人工核对口径。",
+      "suggestion": null,
+      "confidence": 0.4,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "context",
+      "scope_label": "借用了同页其他语句的数字"
+    },
+    {
+      "id": "a0002",
+      "page": 1,
+      "block_id": "b0001",
+      "start_offset": 516,
+      "end_offset": 582,
+      "statement": "2025 年公司电子陶瓷材料及元件、第三代半导体器件及模块收入分别为 20.11/13.04 亿元，占比60.67%/39.33%。",
+      "expression": "13.04/28.78*100",
+      "normalized": "13.04/28.78*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "13.04÷28.78",
+          "value": "0.453092",
+          "value_raw": 0.45309242529534394
+        },
+        {
+          "step": 2,
+          "expression": "13.04 / 28.78×100",
+          "value": "45.309243",
+          "value_raw": 45.309242529534394
+        }
+      ],
+      "computed": 45.309242529534394,
+      "claimed": 39.33,
+      "unit": "%",
+      "deviation": 5.979242529534396,
+      "rel_deviation": 0.1520275242698804,
+      "tolerance_pct": 0.5,
+      "status": "uncovered",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "跨句复算对不上：13.04/28.78*100 = 45.309243%，原文写 39.33%。算式用到了同页其他语句的数字，机器不单独下「报告有错」的结论，请人工核对口径。",
+      "suggestion": null,
+      "confidence": 0.4,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "context",
+      "scope_label": "借用了同页其他语句的数字"
+    },
+    {
+      "id": "a0003",
+      "page": 2,
+      "block_id": "b0023",
+      "start_offset": 2242,
+      "end_offset": 2307,
+      "statement": "当前股价137.72 元（2026 年9 月16 日收盘）对应 2026-2028 年PE 分别为60.2/39.3/26.7 倍",
+      "expression": "137.72/2.29",
+      "normalized": "137.72/2.29",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "137.72÷2.29",
+          "value": "60.139738",
+          "value_raw": 60.13973799126637
+        }
+      ],
+      "computed": 60.13973799126637,
+      "claimed": 60.2,
+      "unit": "倍",
+      "deviation": -0.06026200873363052,
+      "rel_deviation": 0.001001030045409145,
+      "tolerance_pct": 0.5,
+      "status": "pass",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "复算一致：137.72/2.29 = 60.139738倍，与原文一致",
+      "suggestion": null,
+      "confidence": 0.85,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "context",
+      "scope_label": "借用了上下文基数"
+    },
+    {
+      "id": "a0004",
+      "page": 2,
+      "block_id": "b0023",
+      "start_offset": 2242,
+      "end_offset": 2307,
+      "statement": "当前股价137.72 元（2026 年9 月16 日收盘）对应 2026-2028 年PE 分别为60.2/39.3/26.7 倍",
+      "expression": "137.72/3.50",
+      "normalized": "137.72/3.50",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "137.72÷3.5",
+          "value": "39.348571",
+          "value_raw": 39.348571428571425
+        }
+      ],
+      "computed": 39.348571428571425,
+      "claimed": 39.3,
+      "unit": "倍",
+      "deviation": 0.048571428571428044,
+      "rel_deviation": 0.0012359142130134364,
+      "tolerance_pct": 0.5,
+      "status": "pass",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "复算一致：137.72/3.50 = 39.348571倍，与原文一致",
+      "suggestion": null,
+      "confidence": 0.85,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "context",
+      "scope_label": "借用了上下文基数"
+    },
+    {
+      "id": "a0005",
+      "page": 7,
+      "block_id": "b0219",
+      "start_offset": 10524,
+      "end_offset": 10593,
+      "statement": "其中AI 集群用Ethernet 光模块与CPO 市场由2025 年165 亿美元增长 至2026 年260 亿美元、两年增速均为+60%",
+      "expression": "(260-165)/165*100",
+      "normalized": "(260-165)/165*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "260-165",
+          "value": "95",
+          "value_raw": 95.0
+        },
+        {
+          "step": 2,
+          "expression": "260 - 165÷165",
+          "value": "0.575758",
+          "value_raw": 0.5757575757575758
+        },
+        {
+          "step": 3,
+          "expression": "(260 - 165) / 165×100",
+          "value": "57.575758",
+          "value_raw": 57.57575757575758
+        }
+      ],
+      "computed": 57.57575757575758,
+      "claimed": 60.0,
+      "unit": "%",
+      "deviation": -2.424242424242422,
+      "rel_deviation": 0.040404040404040366,
+      "tolerance_pct": 0.5,
+      "status": "risk",
+      "risk_level": "high",
+      "rule_codes": [
+        "CALC_MISMATCH"
+      ],
+      "conclusion": "复算不一致：原文写 60%，按文中数据 (260-165)/165*100 = 57.575758%",
+      "suggestion": "原文写60%，按文中数据复算应为57.58%，增速对不上；建议改为57.58%，或补充能得出60%的2025年基数。",
+      "confidence": 0.85,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "sentence",
+      "scope_label": "句内自证"
+    },
+    {
+      "id": "a0006",
+      "page": 7,
+      "block_id": "b0219",
+      "start_offset": 10839,
+      "end_offset": 10908,
+      "statement": "2026 年市场规模预测由春季版的1.51 万亿美元大幅上修至按2026 年第二季度实际数据 推算的1.655 万亿美元、同比增长108%",
+      "expression": "(1.655-1.51)/1.51*100",
+      "normalized": "(1.655-1.51)/1.51*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "1.655-1.51",
+          "value": "0.145",
+          "value_raw": 0.14500000000000002
+        },
+        {
+          "step": 2,
+          "expression": "1.655 - 1.51÷1.51",
+          "value": "0.096026",
+          "value_raw": 0.09602649006622517
+        },
+        {
+          "step": 3,
+          "expression": "(1.655 - 1.51) / 1.51×100",
+          "value": "9.602649",
+          "value_raw": 9.602649006622517
+        }
+      ],
+      "computed": 9.602649006622517,
+      "claimed": 108.0,
+      "unit": "%",
+      "deviation": -98.39735099337749,
+      "rel_deviation": 0.9110865832720138,
+      "tolerance_pct": 0.5,
+      "status": "risk",
+      "risk_level": "high",
+      "rule_codes": [
+        "CALC_MISMATCH"
+      ],
+      "conclusion": "复算不一致：原文写 108%，按文中数据 (1.655-1.51)/1.51*100 = 9.602649%",
+      "suggestion": "原文写108%，按文中数据复算应为9.60%，数字有误，建议将同比增长率改为9.60%或补充能得出108%的同比基数。",
+      "confidence": 0.85,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "sentence",
+      "scope_label": "句内自证"
+    },
+    {
+      "id": "a0007",
+      "page": 9,
+      "block_id": "b0282",
+      "start_offset": 13318,
+      "end_offset": 13350,
+      "statement": "公司2025 年实现营业收入28.78 亿元、同比增长8.67%",
+      "expression": "(28.78-26.48)/26.48*100",
+      "normalized": "(28.78-26.48)/26.48*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "28.78-26.48",
+          "value": "2.3",
+          "value_raw": 2.3000000000000007
+        },
+        {
+          "step": 2,
+          "expression": "28.78 - 26.48÷26.48",
+          "value": "0.086858",
+          "value_raw": 0.0868580060422961
+        },
+        {
+          "step": 3,
+          "expression": "(28.78 - 26.48) / 26.48×100",
+          "value": "8.685801",
+          "value_raw": 8.685800604229609
+        }
+      ],
+      "computed": 8.685800604229609,
+      "claimed": 8.67,
+      "unit": "%",
+      "deviation": 0.01580060422960905,
+      "rel_deviation": 0.0018224457012236506,
+      "tolerance_pct": 0.5,
+      "status": "pass",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "复算一致：(28.78-26.48)/26.48*100 = 8.685801%，与原文一致",
+      "suggestion": null,
+      "confidence": 0.85,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "context",
+      "scope_label": "借用了上下文基数"
+    },
+    {
+      "id": "a0008",
+      "page": 9,
+      "block_id": "b0282",
+      "start_offset": 13352,
+      "end_offset": 13374,
+      "statement": "归母净利润5.63 亿元、同比增长4.36%",
+      "expression": "(5.63-5.39)/5.39*100",
+      "normalized": "(5.63-5.39)/5.39*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "5.63-5.39",
+          "value": "0.24",
+          "value_raw": 0.2400000000000002
+        },
+        {
+          "step": 2,
+          "expression": "5.63 - 5.39÷5.39",
+          "value": "0.044527",
+          "value_raw": 0.04452690166975885
+        },
+        {
+          "step": 3,
+          "expression": "(5.63 - 5.39) / 5.39×100",
+          "value": "4.45269",
+          "value_raw": 4.452690166975885
+        }
+      ],
+      "computed": 4.452690166975885,
+      "claimed": 4.36,
+      "unit": "%",
+      "deviation": 0.09269016697588484,
+      "rel_deviation": 0.021259212609147895,
+      "tolerance_pct": 0.5,
+      "status": "uncovered",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "跨句复算对不上：(5.63-5.39)/5.39*100 = 4.45269%，原文写 4.36%。算式用到了同页其他语句的数字，机器不单独下「报告有错」的结论，请人工核对口径。",
+      "suggestion": null,
+      "confidence": 0.4,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "context",
+      "scope_label": "借用了同页其他语句的数字"
+    },
+    {
+      "id": "a0009",
+      "page": 12,
+      "block_id": "b0376",
+      "start_offset": 17653,
+      "end_offset": 17708,
+      "statement": "营业收入（亿元） 26.76 26.48 28.78 22.11 YoY — -1.0% 8.7% 54.8%",
+      "expression": "(26.48-26.76)/26.76*100",
+      "normalized": "(26.48-26.76)/26.76*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "26.48-26.76",
+          "value": "-0.28",
+          "value_raw": -0.28000000000000114
+        },
+        {
+          "step": 2,
+          "expression": "26.48 - 26.76÷26.76",
+          "value": "-0.010463",
+          "value_raw": -0.010463378176382702
+        },
+        {
+          "step": 3,
+          "expression": "(26.48 - 26.76) / 26.76×100",
+          "value": "-1.046338",
+          "value_raw": -1.0463378176382703
+        }
+      ],
+      "computed": -1.0463378176382703,
+      "claimed": -1.0,
+      "unit": "%",
+      "deviation": -0.04633781763827027,
+      "rel_deviation": 0.04633781763827027,
+      "tolerance_pct": 0.5,
+      "status": "risk",
+      "risk_level": "high",
+      "rule_codes": [
+        "CALC_MISMATCH"
+      ],
+      "conclusion": "复算不一致：原文写 -1%，按文中数据 (26.48-26.76)/26.76*100 = -1.046338%",
+      "suggestion": "原文写-1%，按文中数据复算应为-1.05%，偏差4.63%，建议改为-1.05%或保留一位小数写作-1.0%。",
+      "confidence": 0.85,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "sentence",
+      "scope_label": "句内自证"
+    },
+    {
+      "id": "a0010",
+      "page": 12,
+      "block_id": "b0376",
+      "start_offset": 17653,
+      "end_offset": 17708,
+      "statement": "营业收入（亿元） 26.76 26.48 28.78 22.11 YoY — -1.0% 8.7% 54.8%",
+      "expression": "(28.78-26.48)/26.48*100",
+      "normalized": "(28.78-26.48)/26.48*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "28.78-26.48",
+          "value": "2.3",
+          "value_raw": 2.3000000000000007
+        },
+        {
+          "step": 2,
+          "expression": "28.78 - 26.48÷26.48",
+          "value": "0.086858",
+          "value_raw": 0.0868580060422961
+        },
+        {
+          "step": 3,
+          "expression": "(28.78 - 26.48) / 26.48×100",
+          "value": "8.685801",
+          "value_raw": 8.685800604229609
+        }
+      ],
+      "computed": 8.685800604229609,
+      "claimed": 8.7,
+      "unit": "%",
+      "deviation": -0.01419939577039031,
+      "rel_deviation": 0.0016321144563667025,
+      "tolerance_pct": 0.5,
+      "status": "pass",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "复算一致：(28.78-26.48)/26.48*100 = 8.685801%，与原文一致",
+      "suggestion": null,
+      "confidence": 0.85,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "sentence",
+      "scope_label": "句内自证"
+    },
+    {
+      "id": "a0011",
+      "page": 17,
+      "block_id": "b0536",
+      "start_offset": 22555,
+      "end_offset": 22636,
+      "statement": "我们预计公司2026—2028 年归母净利润分别为10.32/15.81/23.23 亿元，当前市值 621 亿元对应PE 分别为60.2/39.3/26.7 倍",
+      "expression": "621/10.32",
+      "normalized": "621/10.32",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "621÷10.32",
+          "value": "60.174419",
+          "value_raw": 60.17441860465116
+        }
+      ],
+      "computed": 60.17441860465116,
+      "claimed": 60.2,
+      "unit": "倍",
+      "deviation": -0.025581395348844183,
+      "rel_deviation": 0.0004249401220738236,
+      "tolerance_pct": 0.5,
+      "status": "pass",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "复算一致：621/10.32 = 60.174419倍，与原文一致",
+      "suggestion": null,
+      "confidence": 0.85,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "sentence",
+      "scope_label": "句内自证"
+    },
+    {
+      "id": "a0012",
+      "page": 17,
+      "block_id": "b0536",
+      "start_offset": 22555,
+      "end_offset": 22636,
+      "statement": "我们预计公司2026—2028 年归母净利润分别为10.32/15.81/23.23 亿元，当前市值 621 亿元对应PE 分别为60.2/39.3/26.7 倍",
+      "expression": "621/15.81",
+      "normalized": "621/15.81",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "621÷15.81",
+          "value": "39.278937",
+          "value_raw": 39.27893738140418
+        }
+      ],
+      "computed": 39.27893738140418,
+      "claimed": 39.3,
+      "unit": "倍",
+      "deviation": -0.02106261859582048,
+      "rel_deviation": 0.0005359444935323279,
+      "tolerance_pct": 0.5,
+      "status": "pass",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "复算一致：621/15.81 = 39.278937倍，与原文一致",
+      "suggestion": null,
+      "confidence": 0.85,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "sentence",
+      "scope_label": "句内自证"
+    },
+    {
+      "id": "a0013",
+      "page": 19,
+      "block_id": "b0622",
+      "start_offset": 25699,
+      "end_offset": 25777,
+      "statement": "营业成本 1,684.2 1,808.0 3,022.5 4,288.0 6,032.5 毛利率 36.4% 37.2% 35.0% 36.0% 36.5%",
+      "expression": "1684.2/2648.5*100",
+      "normalized": "1684.2/2648.5*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "1684.2÷2648.5",
+          "value": "0.635907",
+          "value_raw": 0.6359071172361714
+        },
+        {
+          "step": 2,
+          "expression": "1684.2 / 2648.5×100",
+          "value": "63.590712",
+          "value_raw": 63.59071172361715
+        }
+      ],
+      "computed": 63.59071172361715,
+      "claimed": 36.4,
+      "unit": "%",
+      "deviation": 27.19071172361715,
+      "rel_deviation": 0.746997574824647,
+      "tolerance_pct": 0.5,
+      "status": "uncovered",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "跨句复算对不上：1684.2/2648.5*100 = 63.590712%，原文写 36.4%。算式用到了同页其他语句的数字，机器不单独下「报告有错」的结论，请人工核对口径。",
+      "suggestion": null,
+      "confidence": 0.4,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "context",
+      "scope_label": "借用了同页其他语句的数字"
+    },
+    {
+      "id": "a0014",
+      "page": 19,
+      "block_id": "b0622",
+      "start_offset": 25809,
+      "end_offset": 25869,
+      "statement": "销售费用 15.1 15.2 18.6 26.8 38.0 销售费用率 0.6% 0.5% 0.4% 0.4% 0.4%",
+      "expression": "15.1/2648.5*100",
+      "normalized": "15.1/2648.5*100",
+      "steps": [
+        {
+          "step": 1,
+          "expression": "15.1÷2648.5",
+          "value": "0.005701",
+          "value_raw": 0.0057013403813479325
+        },
+        {
+          "step": 2,
+          "expression": "15.1 / 2648.5×100",
+          "value": "0.570134",
+          "value_raw": 0.5701340381347932
+        }
+      ],
+      "computed": 0.5701340381347932,
+      "claimed": 0.6,
+      "unit": "%",
+      "deviation": -0.029865961865206736,
+      "rel_deviation": 0.049776603108677896,
+      "tolerance_pct": 0.5,
+      "status": "uncovered",
+      "risk_level": null,
+      "rule_codes": [],
+      "conclusion": "跨句复算对不上：15.1/2648.5*100 = 0.570134%，原文写 0.6%。算式用到了同页其他语句的数字，机器不单独下「报告有错」的结论，请人工核对口径。",
+      "suggestion": null,
+      "confidence": 0.4,
+      "extracted_by": "llm",
+      "extract_reason": "大模型从句子中提取的算式",
+      "scope": "context",
+      "scope_label": "借用了同页其他语句的数字"
+    }
+  ],
+  "stats": {
+    "pages_scanned": 25,
+    "sentences_scanned": 281,
+    "annotations_total": 14,
+    "risk": 3,
+    "pass": 6,
+    "uncovered": 5,
+    "extracted_by_llm": 14,
+    "extracted_by_rule": 0,
+    "dropped_by_validation": 8,
+    "cross_skipped": 5
+  },
+  "llm": {
+    "available": true,
+    "model": "deepseek-chat",
+    "calls": 34,
+    "elapsed_ms": 54606,
+    "tokens_est": 69380,
+    "failed": 0,
+    "detail": [
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1066,
+        "chars_in": 4965,
+        "chars_out": 12,
+        "tokens_est": 3981,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1074,
+        "chars_in": 3029,
+        "chars_out": 149,
+        "tokens_est": 2542,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 2045,
+        "chars_in": 3489,
+        "chars_out": 525,
+        "tokens_est": 3211,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 966,
+        "chars_in": 3167,
+        "chars_out": 12,
+        "tokens_est": 2543,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 2447,
+        "chars_in": 2859,
+        "chars_out": 816,
+        "tokens_est": 2940,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1295,
+        "chars_in": 2991,
+        "chars_out": 12,
+        "tokens_est": 2402,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1519,
+        "chars_in": 2761,
+        "chars_out": 478,
+        "tokens_est": 2591,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1430,
+        "chars_in": 3082,
+        "chars_out": 12,
+        "tokens_est": 2475,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "write_annotation",
+        "prompt_version": 1,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1497,
+        "chars_in": 469,
+        "chars_out": 52,
+        "tokens_est": 416,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1830,
+        "chars_in": 2734,
+        "chars_out": 528,
+        "tokens_est": 2609,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "write_annotation",
+        "prompt_version": 1,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1530,
+        "chars_in": 478,
+        "chars_out": 58,
+        "tokens_est": 428,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "write_annotation",
+        "prompt_version": 1,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1241,
+        "chars_in": 469,
+        "chars_out": 44,
+        "tokens_est": 410,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1848,
+        "chars_in": 2739,
+        "chars_out": 179,
+        "tokens_est": 2334,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "write_annotation",
+        "prompt_version": 1,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1847,
+        "chars_in": 447,
+        "chars_out": 41,
+        "tokens_est": 390,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "write_annotation",
+        "prompt_version": 1,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1841,
+        "chars_in": 484,
+        "chars_out": 59,
+        "tokens_est": 434,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1823,
+        "chars_in": 3170,
+        "chars_out": 156,
+        "tokens_est": 2660,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1819,
+        "chars_in": 3069,
+        "chars_out": 481,
+        "tokens_est": 2840,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "write_annotation",
+        "prompt_version": 1,
+        "model": "deepseek-chat",
+        "elapsed_ms": 885,
+        "chars_in": 470,
+        "chars_out": 56,
+        "tokens_est": 420,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1492,
+        "chars_in": 2451,
+        "chars_out": 12,
+        "tokens_est": 1970,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1787,
+        "chars_in": 2779,
+        "chars_out": 164,
+        "tokens_est": 2354,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 2690,
+        "chars_in": 2589,
+        "chars_out": 169,
+        "tokens_est": 2206,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1087,
+        "chars_in": 3301,
+        "chars_out": 12,
+        "tokens_est": 2650,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "write_annotation",
+        "prompt_version": 1,
+        "model": "deepseek-chat",
+        "elapsed_ms": 2299,
+        "chars_in": 469,
+        "chars_out": 44,
+        "tokens_est": 410,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 2007,
+        "chars_in": 3188,
+        "chars_out": 666,
+        "tokens_est": 3083,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 2607,
+        "chars_in": 3185,
+        "chars_out": 140,
+        "tokens_est": 2660,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1101,
+        "chars_in": 2644,
+        "chars_out": 12,
+        "tokens_est": 2124,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "write_annotation",
+        "prompt_version": 1,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1176,
+        "chars_in": 483,
+        "chars_out": 47,
+        "tokens_est": 424,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1166,
+        "chars_in": 2738,
+        "chars_out": 12,
+        "tokens_est": 2200,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 978,
+        "chars_in": 1950,
+        "chars_out": 12,
+        "tokens_est": 1569,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 2720,
+        "chars_in": 3077,
+        "chars_out": 1001,
+        "tokens_est": 3262,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1212,
+        "chars_in": 3686,
+        "chars_out": 12,
+        "tokens_est": 2958,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 975,
+        "chars_in": 1718,
+        "chars_out": 12,
+        "tokens_est": 1384,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "write_annotation",
+        "prompt_version": 1,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1917,
+        "chars_in": 483,
+        "chars_out": 47,
+        "tokens_est": 424,
+        "ok": true,
+        "error": ""
+      },
+      {
+        "prompt_key": "extract_numbers",
+        "prompt_version": 4,
+        "model": "deepseek-chat",
+        "elapsed_ms": 1389,
+        "chars_in": 5083,
+        "chars_out": 12,
+        "tokens_est": 4076,
+        "ok": true,
+        "error": ""
+      }
+    ]
+  },
+  "elapsed_ms": 14300,
+  "generated_at": "2026-10-05T22:47:14+08:00",
+  "notes": [
+    "另有 8 条算式被本地校验挡下：模型给出的数字/声称值在原文里找不到，这类「自算自对」的比对没有意义，不计入结论（宁可漏报，不可误报）。",
+    "另有 5 条算式借用了上下文基数却「算不平」：跨句推断容易张冠李戴，这类只报「对得上」，不报「有错」，需要人工看原文判断。"
+  ]
+}

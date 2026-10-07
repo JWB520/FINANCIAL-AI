@@ -13,7 +13,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    # env_prefix 必须是 RQC_：`.env.example` 里所有键名都是 RQC_*（RQC_LLM_API_KEY、RQC_DATABASE_URL…）。
+    # 【这是一个真 bug 的修复】骨架期这里漏了 env_prefix，于是 pydantic 去找的是无前缀的
+    # LLM_API_KEY / DATABASE_URL —— 谁照着 .env.example 配 Key 都不会生效，而且**不报错**，
+    # 只表现为"模型未接入"，极难排查。
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        env_prefix="RQC_",
+        extra="ignore",
+    )
 
     # ---------- 应用 ----------
     app_name: str = "RQC 后端 · 研报核查与质量评估平台"
